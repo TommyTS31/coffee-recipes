@@ -1,33 +1,3 @@
-<script setup>
-const email = ref("");
-const password = ref("");
-const client = useSupabaseClient();
-const {
-  data: { user },
-} = await client.auth.getUser();
-
-onMounted(() => {
-  watchEffect(() => {
-    if (user) {
-      navigateTo("/");
-    }
-  });
-});
-
-const login = async () => {
-  const { data, error } = await client.auth.signInWithPassword({
-    email: email.value,
-    password: password.value,
-  });
-  if (error) {
-    console.log("error", error);
-  } else {
-    reloadNuxtApp();
-    navigateTo("/");
-  }
-};
-</script>
-
 <template>
   <div class="flex justify-center mt-5">
     <div
@@ -59,3 +29,33 @@ const login = async () => {
     </div>
   </div>
 </template>
+
+<script setup>
+const email = ref("");
+const password = ref("");
+const client = useSupabaseClient();
+const {
+  data: { user },
+} = await client.auth.getUser();
+
+onMounted(() => {
+  watchEffect(() => {
+    if (user) {
+      navigateTo("/");
+    }
+  });
+});
+
+const login = async () => {
+  const { data, error } = await client.auth.signInWithPassword({
+    email: email.value,
+    password: password.value,
+  });
+  if (error) {
+    console.log("error", error);
+  } else {
+    reloadNuxtApp();
+    navigateTo("/");
+  }
+};
+</script>
