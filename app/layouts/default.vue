@@ -1,5 +1,6 @@
 <template>
   <div>
+    <NavigationStandardBar />
     <slot />
   </div>
 </template>
