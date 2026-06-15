@@ -102,24 +102,6 @@
 
 <script setup>
 const client = useSupabaseClient();
-const brewMethodChoices = ref([
-  { brewer: "Espresso", svg: "brewing-icon:espresso", id: 1 },
-  { brewer: "V60 Dripper", svg: "brewing-icon:dripper", id: 2 },
-  { brewer: "Chemex", svg: "brewing-icon:chemex", id: 3 },
-  { brewer: "Kalita Wave", svg: "brewing-icon:dripper", id: 4 },
-  { brewer: "Clever Dripper", svg: "brewing-icon:dripper", id: 5 },
-  { brewer: "Hario Switch", svg: "brewing-icon:dripper", id: 6 },
-  { brewer: "Aeropress", svg: "brewing-icon:aeropress", id: 7 },
-  { brewer: "French Press", svg: "brewing-icon:frenchpress", id: 8 },
-  { brewer: "Moka Pot", svg: "brewing-icon:mokapot", id: 9 },
-  { brewer: "Coffee Pod", svg: "brewing-icon:bag", id: 10 },
-]);
-const roastChoices = ref([
-  { type: "Dark", colour: "color: #3D2B1F", id: 1 },
-  { type: "Medium", colour: "color: #654321", id: 2 },
-  { type: "Light", colour: "color: #B38B6D", id: 3 },
-  { type: "Omni", colour: "color: #7F5112", id: 4 },
-]);
 
 const recipe = ref({
   title: "",
