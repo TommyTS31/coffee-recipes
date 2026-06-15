@@ -3,18 +3,18 @@
     <div
       class="shadow w-11/12 md:w-3/4 lg:w-7/12 bg-white font-sans font-medium p-4 rounded-md border border-gray-300"
     >
-      <div class="mb-4">
-        <p class="font-sans font-semibold text-2xl mb-4">New Coffee Recipe</p>
+      <div>
+        <p class="font-sans font-semibold text-2xl mb-4">Add A New Coffee Recipe</p>
         <label class="block mb-2 text-sm font-medium">Recipe Name</label>
         <input
           type="text"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 mb-2"
           placeholder="V60 Light Roast"
-          v-model="recipe.title"
+          v-model="recipe.meal_name"
           required
         />
       </div>
-      <div class="mb-4">
+      <div>
         <label class="block mb-2 text-sm font-medium mt-2">Description</label>
         <textarea
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 mb-2"
@@ -23,63 +23,65 @@
           required
         />
       </div>
-      <div class="mb-4">
-        <label class="block mb-2 text-xs md:text-sm font-medium mt-2"
-          >Coffee Roast</label
-        >
-        <ul class="grid grid-cols-2 md:grid-cols-4 gap-1 w-full">
-          <li v-for="roast in roastChoices" class="">
-            <input
-              type="radio"
-              name="roasts"
-              :id="roast.id"
-              class="py-2 mx-1.5 w-5 hidden peer"
-              :value="roast.id"
-              v-model="recipe.roast_type"
-            />
-            <label
-              class="inline-flex items-center text-base font-sans font-medium px-2 w-full h-full py-1.5 text-gray-600 bg-white border border-gray-200 rounded-md cursor-pointer peer-checked:border-blackbg peer-checked:text-blackbg hover:text-gray-600 hover:bg-gray-100"
-              :for="roast.id"
-            >
-              <Icon
-                name="ph:coffee-bean-fill"
-                :style="roast.colour"
-                class="size-5 mx-2"
+      <div>
+        <label class="block mb-2 text-sm font-medium mt-2">Coffee Roast</label>
+        <ul class="flex flex-row flex-wrap justify-center w-full">
+          <div class="flex grow flex-wrap">
+            <li v-for="roast in roastChoices" class="m-0.5 grow w-1/5">
+              <input
+                type="radio"
+                name="roasts"
+                :id="roast"
+                class="py-2 mx-1.5 w-5 hidden peer"
+                :value="roast"
+                v-model="recipe.roasts"
               />
-              {{ roast.type }}
-            </label>
-          </li>
+              <label
+                class="inline-flex items-center text-sm font-sans font-medium px-2 w-full h-full py-1.5 text-gray-500 bg-white border border-gray-200 rounded-md cursor-pointer peer-checked:border-blackbg peer-checked:text-blackbg hover:text-gray-600 hover:bg-gray-100"
+                :for="roast.type"
+              >
+                <Icon
+                  name="ph:coffee-bean-fill"
+                  :style="roast.colour"
+                  class="size-4 mx-2"
+                />
+                {{ roast.type }}
+              </label>
+            </li>
+          </div>
         </ul>
       </div>
-      <div class="mb-4">
-        <label class="block mb-2 text-sm font-medium mt-2"
-          >Brewing Method</label
-        >
-        <ul class="grid grid-cols-2 md:grid-cols-3 gap-1 w-full">
-          <li v-for="brewMethod in brewMethodChoices" class="">
-            <input
-              type="radio"
-              name="brewMethods"
-              :id="brewMethod.id"
-              :value="brewMethod.id"
-              v-model="recipe.coffee_brewer"
-              class="py-2 mx-1.5 w-5 hidden peer"
-            />
-            <label
-              class="inline-flex items-center text-base font-sans font-medium px-2 mb-0.5 w-full h-full py-1.5 text-gray-600 bg-white border border-gray-200 rounded-md cursor-pointer peer-checked:border-blackbg peer-checked:text-blackbg hover:text-gray-600 hover:bg-gray-100"
-              :for="brewMethod.id"
+      <div>
+        <label class="block mb-2 text-sm font-medium mt-2">Brewing Method</label>
+        <div v-for="brewClass in brewMethodChoices">
+          <label class="block mb-2 text-sm font-medium mt-2 text-gray-500">{{
+            brewClass.type
+          }}</label>
+          <ul class="flex flex-row flex-wrap justify-center w-full">
+            <li
+              v-for="brewMethod in brewClass.brewers"
+              class="flex m-0.5 w-1/4 flex-wrap"
             >
-              <Icon :name="brewMethod.svg" class="size-6 mx-2 md:mx0.5" />
-              {{ brewMethod.brewer }}
-            </label>
-          </li>
-        </ul>
+              <input
+                type="radio"
+                name="brewMethods"
+                :id="brewMethod"
+                :value="brewMethod"
+                v-model="recipe.brewMethod"
+                class="py-2 mx-1.5 w-5 hidden peer"
+              />
+              <label
+                class="block text-sm font-sans font-medium px-2 mb-0.5 w-full h-full py-1.5 text-gray-500 bg-white border border-gray-200 rounded-md cursor-pointer peer-checked:border-blackbg peer-checked:text-blackbg hover:text-gray-600 hover:bg-gray-100"
+                :for="brewMethod"
+                >{{ brewMethod.type }}</label
+              >
+            </li>
+          </ul>
+        </div>
       </div>
 
       <div>
-        <label
-          class="block mb-2 text-sm font-medium text-gray-900 mt-2"
-          for="file_input"
+        <label class="block mb-2 text-sm font-medium text-gray-900 mt-2" for="file_input"
           >Upload an Image</label
         >
         <input
@@ -103,29 +105,50 @@
 <script setup>
 const client = useSupabaseClient();
 const brewMethodChoices = ref([
-  { brewer: "Espresso", svg: "brewing-icon:espresso", id: 1 },
-  { brewer: "V60 Dripper", svg: "brewing-icon:dripper", id: 2 },
-  { brewer: "Chemex", svg: "brewing-icon:chemex", id: 3 },
-  { brewer: "Kalita Wave", svg: "brewing-icon:dripper", id: 4 },
-  { brewer: "Clever Dripper", svg: "brewing-icon:dripper", id: 5 },
-  { brewer: "Hario Switch", svg: "brewing-icon:dripper", id: 6 },
-  { brewer: "Aeropress", svg: "brewing-icon:aeropress", id: 7 },
-  { brewer: "French Press", svg: "brewing-icon:frenchpress", id: 8 },
-  { brewer: "Moka Pot", svg: "brewing-icon:mokapot", id: 9 },
-  { brewer: "Coffee Pod", svg: "brewing-icon:bag", id: 10 },
+  {
+    type: "Espresso",
+    brewers: [{ type: "Espresso Machine", svg: "" }],
+  },
+  {
+    type: "Pourover",
+    brewers: [
+      { type: "V60 Dripper", svg: "" },
+      { type: "Chemex", svg: "" },
+      { type: "Kalita Wave", svg: "" },
+    ],
+  },
+  {
+    type: "Immersion Brewers",
+    brewers: [
+      { type: "Clever Dripper", svg: "" },
+      { type: "Hario Switch", svg: "" },
+      { type: "Aeropress", svg: "" },
+      { type: "French Press", svg: "" },
+    ],
+  },
+  {
+    type: "Other",
+    brewers: [
+      { type: "Moka Pot", svg: "" },
+      { type: "Machine Dripper", svg: "" },
+      { type: "Coffee Pod", svg: "" },
+    ],
+  },
 ]);
 const roastChoices = ref([
-  { type: "Dark", colour: "color: #3D2B1F", id: 1 },
-  { type: "Medium", colour: "color: #654321", id: 2 },
-  { type: "Light", colour: "color: #B38B6D", id: 3 },
-  { type: "Omni", colour: "color: #7F5112", id: 4 },
+  { type: "Dark Roast", colour: "color: #3D2B1F" },
+  { type: "Medium Roast", colour: "color: #654321" },
+  { type: "Light Roast", colour: "color: #B38B6D" },
+  { type: "Omni Roast", colour: "color: #7F5112" },
 ]);
 
 const recipe = ref({
-  title: "",
+  meal_name: "",
   description: "",
-  roast_type: "",
-  coffee_brewer: "",
+  roasts: "",
+  brewMethod: "",
+  extra: "",
+  image_link: "",
 });
 
 const imagePath = ref("");
@@ -138,8 +161,8 @@ async function onChangeFile(event) {
 async function uploadImage() {
   // Upload image
   const { data, error } = await client.storage
-    .from("Coffee Pictures")
-    .upload("Post/" + localImage.value.name, localImage.value, {
+    .from("Meal Images")
+    .upload("meals/" + localImage.value.name, localImage.value, {
       cacheControl: "3600",
       upsert: false,
     });
@@ -151,10 +174,9 @@ async function uploadImage() {
 }
 
 async function submitMeal() {
-  console.log(recipe);
-  //await uploadImage();
+  await uploadImage();
 
-  const { error } = await client.from("coffee_recipe").insert(recipe.value);
+  const { error } = await client.from("recipe-list").insert(recipe.value);
   if (error) {
     console.log(error);
   } else {
